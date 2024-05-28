@@ -1,5 +1,6 @@
 package openfl.text._internal;
 
+#if !flash
 import haxe.Timer;
 import openfl.display3D._internal.GLTexture;
 import openfl.utils._internal.Log;
@@ -94,7 +95,9 @@ class TextEngine
 	@:noCompletion private var __measuredWidth:Int;
 	@:noCompletion private var __restrictRegexp:EReg;
 	@:noCompletion private var __selectionStart:Int;
+	#if !openfl_disable_text_measurement_cache
 	@:noCompletion private var __shapeCache:ShapeCache;
+	#end
 	@:noCompletion private var __showCursor:Bool;
 	@:noCompletion private var __textFormat:TextFormat;
 	@:noCompletion private var __textLayout:TextLayout;
@@ -109,7 +112,9 @@ class TextEngine
 
 	public function new(textField:TextField)
 	{
+		#if !openfl_disable_text_measurement_cache
 		__shapeCache = new ShapeCache();
+		#end
 		this.textField = textField;
 
 		width = 100;
@@ -868,7 +873,11 @@ class TextEngine
 				return html5Positions();
 			}
 
+			#if openfl_disable_text_measurement_cache
+			return html5Positions();
+			#else
 			return __shapeCache.cache(formatRange, html5Positions, text.substring(startIndex, endIndex));
+			#end
 			#else
 			if (__textLayout == null)
 			{
@@ -899,7 +908,11 @@ class TextEngine
 				return __textLayout.positions;
 			}
 
+			#if openfl_disable_text_measurement_cache
+			return __textLayout.positions;
+			#else
 			return __shapeCache.cache(formatRange, __textLayout);
+			#end
 			#end
 		} #if !js inline #end function getPositionsWidth(positions:#if (js && html5) Array<Float> #else Array<GlyphPosition> #end):Float
 
@@ -1101,7 +1114,7 @@ class TextEngine
 					{
 						if (!nextFormatRange())
 						{
-							Log.warn("You found a bug in OpenFL's text code! Please save a copy of your project and contact Joshua Granick (@singmajesty) so we can fix this.");
+							Log.warn("You found a bug in OpenFL's text code! Please save a copy of your project and create an issue on GitHub so we can fix this.");
 							break;
 						}
 
@@ -1189,7 +1202,7 @@ class TextEngine
 
 					if (!nextFormatRange())
 					{
-						Log.warn("You found a bug in OpenFL's text code! Please save a copy of your project and contact Joshua Granick (@singmajesty) so we can fix this.");
+						Log.warn("You found a bug in OpenFL's text code! Please save a copy of your project and create an issue on GitHub so we can fix this.");
 						break;
 					}
 
@@ -2022,3 +2035,4 @@ private class DefaultFontSet
 		return normal;
 	}
 }
+#end

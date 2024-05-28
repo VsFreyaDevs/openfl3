@@ -1,5 +1,6 @@
 package openfl.display._internal;
 
+#if !flash
 import openfl.text._internal.HTMLParser;
 import openfl.text._internal.TextEngine;
 import openfl.display.BitmapData;
@@ -151,6 +152,11 @@ class CanvasTextField
 				{
 					context.clearRect(0, 0, graphics.__canvas.width, graphics.__canvas.height);
 				}
+
+				#if openfl_hack_fix_chrome_text
+				context.fillStyle = "rgba(0, 0, 0, 0.01)";
+				context.fillRect(0, 0, graphics.__canvas.width, graphics.__canvas.height);
+				#end
 
 				if ((textEngine.text != null && textEngine.text != "") || textEngine.__hasFocus)
 				{
@@ -444,3 +450,4 @@ class CanvasTextField
 		CanvasDisplayObject.renderDrawableMask(textField, renderer);
 	}
 }
+#end

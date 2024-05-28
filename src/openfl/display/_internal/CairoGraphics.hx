@@ -1,5 +1,6 @@
 package openfl.display._internal;
 
+#if !flash
 import openfl.display._internal.DrawCommandBuffer;
 import openfl.display._internal.DrawCommandReader;
 import openfl.display.BitmapData;
@@ -80,12 +81,12 @@ class CairoGraphics
 		cairo.newPath();
 	}
 
-	private static function createGradientPattern(type:GradientType, colors:Array<Dynamic>, alphas:Array<Dynamic>, ratios:Array<Dynamic>, matrix:Matrix,
+	private static function createGradientPattern(type:GradientType, colors:Array<Int>, alphas:Array<Float>, ratios:Array<Int>, matrix:Matrix,
 			spreadMethod:SpreadMethod, interpolationMethod:InterpolationMethod, focalPointRatio:Float):CairoPattern
 	{
 		var pattern:CairoPattern = null,
-			point = null,
-			point2 = null,
+			point:Point = null,
+			point2:Point = null,
 			releaseMatrix = false;
 
 		if (matrix == null)
@@ -123,7 +124,7 @@ class CairoGraphics
 				pattern = CairoPattern.createLinear(point.x, point.y, point2.x, point2.y);
 		}
 
-		var rgb, alpha, r, g, b, ratio;
+		var rgb:Int, alpha:Float, r:Float, g:Float, b:Float, ratio:Float;
 
 		for (i in 0...colors.length)
 		{
@@ -225,6 +226,7 @@ class CairoGraphics
 
 		if (graphics.__commands.length == 0 || bounds == null || bounds.width == 0 || bounds.height == 0 || !bounds.contains(x, y))
 		{
+			CairoGraphics.graphics = null;
 			return false;
 		}
 		else
@@ -302,6 +304,7 @@ class CairoGraphics
 						if (hasFill && cairo.inFill(x, y))
 						{
 							data.destroy();
+							CairoGraphics.graphics = null;
 							return true;
 						}
 
@@ -310,6 +313,7 @@ class CairoGraphics
 						if (hasStroke && cairo.inStroke(x, y))
 						{
 							data.destroy();
+							CairoGraphics.graphics = null;
 							return true;
 						}
 
@@ -322,6 +326,7 @@ class CairoGraphics
 						if (hasFill && cairo.inFill(x, y))
 						{
 							data.destroy();
+							CairoGraphics.graphics = null;
 							return true;
 						}
 
@@ -330,6 +335,7 @@ class CairoGraphics
 						if (hasStroke && cairo.inStroke(x, y))
 						{
 							data.destroy();
+							CairoGraphics.graphics = null;
 							return true;
 						}
 
@@ -417,6 +423,7 @@ class CairoGraphics
 
 			data.destroy();
 
+			CairoGraphics.graphics = null;
 			return hitTest;
 		}
 		#end
@@ -1153,7 +1160,11 @@ class CairoGraphics
 
 		graphics.__update(renderer.__worldTransform, pixelRatio);
 
-		if (!graphics.__softwareDirty || graphics.__managed) return;
+		if (!graphics.__softwareDirty || graphics.__managed)
+		{
+			CairoGraphics.graphics = null;
+			return;
+		}
 
 		bounds = graphics.__bounds;
 
@@ -1436,6 +1447,7 @@ class CairoGraphics
 
 		graphics.__softwareDirty = false;
 		graphics.__dirty = false;
+		CairoGraphics.graphics = null;
 		#end
 	}
 
@@ -1546,3 +1558,4 @@ private typedef NormalizedUVT =
 	max:Float,
 	uvt:Vector<Float>
 }
+#end
