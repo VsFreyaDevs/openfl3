@@ -128,8 +128,7 @@ import openfl.display._internal.stats.DrawCallContext;
 @:access(openfl.geom.Point)
 @:access(openfl.geom.Rectangle)
 #if !openfl_debug
-@:fileXml('tags="haxe,release"')
-@:noDebug
+@:fileXml('tags="haxe,release"') @:noDebug
 #end
 @:autoBuild(openfl.utils._internal.AssetsMacro.embedBitmap())
 class BitmapData implements IBitmapDrawable
@@ -2570,10 +2569,10 @@ class BitmapData implements IBitmapDrawable
 	}
 
 	/**
-		When targeting AIR, this method locks an image so that any objects 
-		that reference the BitmapData object, such as Bitmap objects, are not 
-		updated when this BitmapData object changes. To improve performance, 
-		use this method along with the `unlock()` method before and after numerous 
+		When targeting AIR, this method locks an image so that any objects
+		that reference the BitmapData object, such as Bitmap objects, are not
+		updated when this BitmapData object changes. To improve performance,
+		use this method along with the `unlock()` method before and after numerous
 		calls to the `setPixel()` or `setPixel32()` method.
 
 		Note: This method only provides an optimization on the AIR(Flash) target.
@@ -3072,8 +3071,8 @@ class BitmapData implements IBitmapDrawable
 	}
 
 	/**
-		When targeting AIR, this method Unlocks an image so that any objects that reference 
-		the BitmapData object, such as Bitmap objects, are updated when this BitmapData object 
+		When targeting AIR, this method Unlocks an image so that any objects that reference
+		the BitmapData object, such as Bitmap objects, are updated when this BitmapData object
 		changes.
 
 		To improve performance, use this method along with the `lock()`
