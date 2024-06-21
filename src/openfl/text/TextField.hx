@@ -1267,7 +1267,7 @@ class TextField extends InteractiveObject
 	**/
 	public function getTextFormat(beginIndex:Int = -1, endIndex:Int = -1):TextFormat
 	{
-		var format = null;
+		var format:TextFormat = null;
 
 		if (beginIndex >= text.length || beginIndex < -1 || endIndex > text.length || endIndex < -1)
 			throw new RangeError("The supplied index is out of bounds");
@@ -1470,7 +1470,7 @@ class TextField extends InteractiveObject
 	public function setTextFormat(format:TextFormat, beginIndex:Int = -1, endIndex:Int = -1):Void
 	{
 		var max = text.length;
-		var range;
+		var range:TextFormatRange;
 
 		if (beginIndex == -1)
 		{
@@ -1514,7 +1514,7 @@ class TextField extends InteractiveObject
 		else
 		{
 			var index = 0;
-			var newRange;
+			var newRange:TextFormatRange;
 
 			while (index < __textEngine.textFormatRanges.length)
 			{
@@ -2167,7 +2167,7 @@ class TextField extends InteractiveObject
 		var offset = newText.length - (endIndex - beginIndex);
 
 		var i = 0;
-		var range;
+		var range:TextFormatRange;
 
 		while (i < __textEngine.textFormatRanges.length)
 		{
